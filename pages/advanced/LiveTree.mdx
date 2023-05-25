@@ -1,0 +1,317 @@
+import { Tab, Tabs } from 'nextra-theme-docs'
+
+
+
+
+<details>
+  <summary>Click to expand/collapse</summary>
+
+
+
+  This is the collapsible section content.
+</details>
+
+
+## Overview
+
+At its core, LiveTree employs multiple recursive tree traversal strategies to ```search``` , ```parse/aggregate``` and  ```render``` the tree structures the user interacts with in the Webflow designer. This rendering process caters to any depth of nested The recursive nature of the component is exemplified through the use of the TreeViewNode, which takes charge of rendering individual nodes, as well as their child nodes.
+
+<Tabs items={['parseHTML', 'TreeView']}>
+  <Tab>
+    <details>
+      <summary>Code Examples</summary>
+```javascript
+
+  function parseNode(element, depth) {
+    if (depth > maxDepth) {
+      return {
+        tag: element.tagName.toLowerCase(),
+        class: element.classList.length > 0 ? Array.from(element.classList).join(' ') : null,
+        children: [],
+        css: null,
+        textContent: element.childNodes.length > 0 && Array.from(element.childNodes).some(child => child.nodeType === Node.TEXT_NODE) ? element.textContent.trim() : null,
+        imageUrl: getAssetUrl(element)
+      };
+    }
+
+    const node = {
+      tag: element.tagName.toLowerCase(),
+      class: element.classList.length > 0 ? Array.from(element.classList).join(' ') : null,
+      children: [],
+      css: null,
+      textContent: element.childNodes.length > 0 && Array.from(element.childNodes).some(child => child.nodeType === Node.TEXT_NODE) ? element.textContent.trim() : null,
+      imageUrl: getAssetUrl(element)
+    };
+
+    if (element.classList.length > 0) {
+      const filteredClassList = Array.from(element.classList).filter(className => !className.startsWith('w'));
+
+      if (filteredClassList.length > 0) {
+        classNames.add('.' + filteredClassList.join('.'));
+
+        // Add individual class names
+        filteredClassList.forEach(className => {
+          classNames.add('.' + className);
+        });
+      }
+    }
+
+    if (element.children.length > 0) {
+      for (let i = 0; i < element.children.length; i++) {
+        const child = element.children[i];
+        if (child.nodeType === Node.ELEMENT_NODE) {
+          node.children.push(parseNode(child, depth + 1));
+        }
+      }
+    }
+
+    return node;
+  }
+
+  const parsedNode = parseNode(doc.body, 0);
+  const classNamesArray = Array.from(classNames);
+  return { parsedNode, classNamesArray };
+}
+
+```
+    </details>
+  </Tab>
+  <Tab>
+    TreeViewNode Stipped of Functionality
+    <details>
+      <summary>Code Examples</summary>
+```javascript
+export default function LiveTree({ controlPosition }) {
+
+  const {
+    currentNodeAnalysisRef,
+    printNodeAnalysis
+  } = useWebflowGptContext();
+
+
+  useEffect(() => {
+    if (!dataParsed) {
+      StorageOps.getLastLiveCss().then((data) => {
+        if (data && data.lastLiveCss && data.lastLiveCss.lastLiveCss && data.lastLiveCss.cssQuery) {
+          try {
+            setDataParsed(JSON.parse(data.lastLiveCss.lastLiveCss));
+            setCssQuery(JSON.parse(data.lastLiveCss.cssQuery));
+          } catch (error) {
+            throw new Error(error);
+          }
+        }
+
+      });
+    }
+  }, []);
+
+
+  if (!dataParsed) {
+    return <div className="emptyMessage">Please Select an Element on Webflow </div>;
+  }
+
+  let transformedTree = updateCss(dataParsed, cssQuery)
+  const aggregatedData = AggregateData(transformedTree);
+  currentNodeAnalysisRef.current = aggregatedData;
+  StorageOps.addNodeAnalysis(currentNodeAnalysisRef.current);
+
+
+  return (
+    <div className="treeContainer">
+      <div>
+        <ul className="tree root">
+          {transformedTree?.children?.map((child, index) => (
+            <TreeViewNode
+              loadingNewStyleSheet={loadingNewStyleSheet}
+              allNodesInactive={allNodesInactive}
+              node={child}
+              css={cssQuery}
+              transformedTree={transformedTree}
+              activeItems={activeItems}
+              setActiveItems={setActiveItems}
+              level={0}
+              isActive={index === 0}
+              passDownCss={cssQuery}
+              zoomLevel={zoomLevel}
+              maxDepth={maxDepth}
+            />
+          ))}
+        </ul>
+      </div>
+    </div >
+  );
+}
+
+function TreeViewNode({ css, passDownCss, node, activeItems, setActiveItems, level = 0, allNodesInactive, maxDepth, loadingNewStyleSheet }) {
+  const [isActive, setIsActive] = useState(level === 0 && !allNodesInactive);
+
+  const handleItemClick = () => {
+    if (level === 0) {
+      return;
+    }
+    setIsActive(!isActive);
+    if (!isActive) {
+      setActiveItems([...activeItems, node.tag]);
+    } else {
+      setActiveItems(activeItems.filter((item) => item !== node.tag));
+    }
+  };
+
+  const hasChildren = node.children && node.children.length > 0;
+  const nodeCss = transformCSSData(passDownCss, node);
+
+  return (
+    <div className={`flow-down`}>
+      <li
+        className={`flow-down-animated`}
+        style={{ borderImage: `linear-gradient(to bottom, ${currentCodeAccent}, rgba(136, 167, 184, 0.219)) 1` }}>
+
+        {hasChildren && (
+          <span
+            className={`arrow ${isActive ? "arrow-down" : ""}`}
+            onClick={handleItemClick}
+          />
+        )}
+        <div className="codeParent" style={{ borderImage: `linear-gradient(to bottom, ${currentCodeAccent}, rgba(136, 167, 184, 0.219)) 1` }}>
+          <div className="code__container" style={{ borderImage: `linear-gradient(to bottom, ${currentCodeAccent}, rgba(136, 167, 184, 0.219)) 1` }}>
+            <Live
+              loadingNewStyleSheet={loadingNewStyleSheet}
+              node={node}
+              cssString={nodeCss}
+              isFirst={level === 0} // this prop is to determine if it's the first element should be open
+            />
+          </div>
+          {/* {node.class && <span className="class">.{node.class}</span>} */}
+        </div>
+        {hasChildren && isActive && level < maxDepth && (
+          <ul className={`tree ${level === 0 ? "root" : ""}`} style={{ borderImage: `linear-gradient(to bottom, ${currentCodeAccent}, rgba(136, 167, 184, 0.219)) 1` }}>
+            {node.children.map((child) => (
+              <React.Fragment >
+                <TreeViewNode
+                  node={child}
+                  loadingNewStyleSheet={loadingNewStyleSheet}
+                  activeItems={activeItems}
+                  setActiveItems={setActiveItems}
+                  level={level + 1}
+                  passDownCss={passDownCss}
+                  maxDepth={maxDepth}
+                />
+              </React.Fragment>
+
+            ))}
+          </ul>
+        )
+        }
+      </li >
+    </div>
+
+  );
+}
+
+```
+ </details>
+  </Tab>
+
+</Tabs>
+
+## Util/ Controls
+
+
+<details>
+  <summary>Control Details</summary>
+- **`handleAllNodesInactive`**: Toggles the **`allNodesInactive`** state
+- **`increaseZoom`**: Increases the **`zoomLevel`** state
+- **`maxDepth`**: Maximum depth of the tree structure
+- **`decreaseZoom`**: Decreases the **`zoomLevel`** state
+- **`applyScaledClass`**: Applies a scaled class to tree containers
+- **`updateStyleSheet`**: Sends a message to the content script to update the stylesheet and sets **`loadingNewStyleSheet`**
+
+</details>
+
+
+## Design Patterns
+<details>
+  <summary>Control Details</summary>
+### Fanout
+### Throughput
+
+</details>
+
+
+<br />
+
+
+
+## Data Aggregation
+<details>
+  <summary>Data Aggregation Details:</summary>
+The **`useWeb`** custom hook is designed to handle parsing of stylesheets and efficient caching of the results using IndexedDB. This hook leverages web workers to offload the parsing and caching tasks to separate threads, enabling the main thread to remain responsive and unblocked.
+
+The primary features of this implementation are:
+
+1. Parsing CSS stylesheets with media queries and extracting relevant information.
+2. Caching the parsed stylesheet information using IndexedDB for efficient retrieval and reduced overhead.
+3. Utilizing web workers for offloading parsing and caching tasks to separate threads, ensuring the main thread remains responsive.
+4. Updating and managing the cache as stylesheets change or new stylesheets are added.
+The **`useWeb`** hook provides the following functions:
+
+**`runWorkers(classNames)`**: Takes an array of class names and runs the web workers to search and cache the styles associated with the provided class names.
+  **`runWorkers(classNames)`**: Takes an array of class names and runs the web workers to search and cache the styles associated with the provided class names.
+ **`init()`**: Initializes the web workers and the IndexedDB instance.
+ **`changeStyleSheet()`**: Updates the parsed stylesheet information and the cache when a new stylesheet is added or an existing one is changed.
+
+  </details>
+
+
+<br />
+
+
+
+
+## Optimizations
+
+<details>
+  <summary>Opitmization Details</summary>
+
+    ### Cache
+
+  </details>
+
+
+
+
+
+
+### **Web Workers**
+
+<details>
+
+<summary>Web Worker Details </summary>
+
+The **`useWeb`** hook utilizes web workers to offload the parsing and caching tasks. A separate worker is created for each media query found in the provided stylesheets. The worker is initialized with the following data:
+
+- **`designUrl`**: The URL of the design.
+- **`classNames`**: An array of class names to search for in the stylesheets.
+- **`conditionText`**: The media query condition text associated with the worker.
+- **`payload`**: The CSS text of the media query associated with the worker.
+
+Upon receiving a message with the type **`find`**, the worker parses the provided CSS text using the CSSOM library and searches for the provided class names within the parsed stylesheet. The worker then caches the matching styles using the **`IndexedDB`** class and sends the results back to the main thread.
+
+
+The **`IndexedDB`** class is responsible for managing the IndexedDB instance used for caching. It provides methods for opening the database, adding data, retrieving data, clearing all stores, and more.
+
+When a new stylesheet is encountered or an existing one is updated, the **`changeStyleSheet()`** function is called to update the parsed stylesheet information and the cache. This ensures that the cache always remains up-to-date with the latest stylesheet information.
+
+#### **WorkerStyleSheet**
+
+The **`WorkerStyleSheet`** class is responsible for searching the parsed stylesheets for the provided class names and managing the cache of matching styles. It provides methods for searching the stylesheets, caching correlated values, and caching all styles.
+
+Upon initialization, the **`WorkerStyleSheet`** class is provided with a parsed CSS stylesheet and an instance of the **`IndexedDB`** class. It then searches the stylesheet for the provided class names and caches the matching styles using the **`IndexedDB`** instance.
+
+# **Conclusion**
+
+The **`useWeb`** hook provides an efficient solution for parsing stylesheets and caching the results using IndexedDB. By leveraging web workers, it ensures that the main thread remains responsive and unblocked while handling complex parsing and caching tasks. This implementation is designed to handle updates to stylesheets and manage the cache efficiently, ensuring optimal performance and scalability for applications
+
+
+
+</details>

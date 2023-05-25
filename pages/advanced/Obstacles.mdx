@@ -1,0 +1,86 @@
+import { Callout } from 'nextra-theme-docs'
+
+## Obstacles
+
+### CSP, CORS, Web workers.
+
+Chrome Extension Protocols
+
+- Chrome extensions use the **`chrome-extension://`**
+ protocol for their resources, including worker scripts.
+
+Standard Worker Init
+
+1. Worker script is typically an external JavaScript file hosted on the same origin as the parent
+2. Web Worker is instantiated using the URL of the worker script (HTTP or HTTPS protocol).
+3. No need to handle CORS restrictions explicitly when loading a worker script from the same origin.
+4. MIME type and additional headers are not usually specified when creating the Web Worker.
+5. This poses a limited compatibility with Chrome extension environment due to URL protocols and potential CORS issues. 🥲
+
+Summary:
+
+- Loading worker scripts from a URL may not be feasible or practical due to the extension's unique security model and sandboxing
+
+```jsx
+const worker = new Worker('worker.js');
+```
+
+Current Solution:
+
+1. Worker script is fetched from the Chrome extension resources using **`chrome.runtime.getURL`**.
+2. Worker script is converted into a Blob object, which is then used to create a Blob URL with the **`blob:`** protocol.
+3. Web Worker is instantiated with the Blob URL, which is considered a same-origin request and bypasses CORS restrictions.
+4. Web Worker is configured with a 'module' type and additional headers, such as 'Content-Type', 'Access-Control-Allow-Origin', 'Access-Control-Allow-Headers', and 'Access-Control-Allow-Methods', to satisfy CORS requirements.
+5. Enhanced compatibility with Chrome extension environment by addressing URL protocols and CORS issues. 😊
+
+```jsx
+const workerResponse = await fetch(chrome.runtime.getURL('workerBundle.js'));
+const workerText = await workerResponse.text();
+const workerBlob = new Blob([workerText], { type: 'application/javascript' });
+const workerUrl = URL.createObjectURL(workerBlob);
+
+const worker = new Worker(workerUrl, {
+  type: 'module',
+  header: {
+    'Content-Type': 'application/javascript',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  },
+});
+```
+
+### Packages in Web Workers.
+
+- ```importScripts()``` - the native process to import external packages in extensions. Caused more cors issues.
+
+My solution to  create WebWorkers in a Chrome extension environment has its advantages, such as bypassing CORS restrictions and compatibility with the extension's URL scheme. However, it comes with a limitation: it's not possible to directly import packages or libraries within the WebWorker due to the way it is instantiated using Blob URLs. 🤦
+
+When using a Blob URL to create a WebWorker, the worker script is isolated from the typical JavaScript module resolution mechanism. The worker script, loaded as a Blob, is executed in a separate global context, making it difficult to import external packages or libraries using standard ```import``` statements, as the worker script loses the context of its original location, file structure, and relative paths.
+
+
+
+<Callout type="info" emoji="🔥">
+  Solution
+</Callout>
+
+***Constraints*** :
+- importing external scripts
+- CORS, CSP
+-  Needing a CSS lib for parsing stylesheet
+
+
+
+
+
+ Flat Module Resolution :
+- During the build process, esbuild inlines the dependencies and resolves module imports, resulting in a flat output that doesn't include ```import``` statements. Consequently, the final build output has no module dependencies and can be run directly in the target environment without relying on additional module loaders.
+
+```jsx
+"build:typescript": "esbuild src/pages/Content/Service/worker.ts --bundle --outdir=src/internalDist --platform=node --target=es6 --loader:.js=jsx --loader:.tsx=tsx --sourcemap --define:process.env.NODE_ENV=\"production\"",
+"build:transferWorker": "esbuild src/internalDist/worker.js --bundle --outfile=dist/workerBundle.js --minify --platform=node --target=node12 --watch",
+```
+
+Summary :
+
+- I resolved the module dependencies / imports of my needed parser libs so that my Web Workers can run their parsing process on separate threads. I then used webpack to copy the worker build from my internal dist to the final build.
