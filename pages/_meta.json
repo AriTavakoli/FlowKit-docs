@@ -1,7 +1,11 @@
 {
-  "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
+  "index": "Get Started",
+  "Introduction" : "Introduction",
+  "docs" : "Docs",
+
+  "advanced": "Engineering Journal",
+
+
   "about": {
     "title": "About",
     "type": "page"
