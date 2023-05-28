@@ -1,11 +1,6 @@
 {
   "index": "Get Started",
-  "Introduction" : "Introduction",
-  "docs" : "Docs",
-
-  "advanced": "Engineering Journal",
-
-
+  "Journal": "Engineering Journal",
   "about": {
     "title": "About",
     "type": "page"

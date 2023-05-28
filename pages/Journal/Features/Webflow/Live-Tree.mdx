@@ -1,18 +1,26 @@
 import { Tab, Tabs } from 'nextra-theme-docs'
 
+## LiveTree
+<br/>
 
 
 
-<details>
-  <summary>Click to expand/collapse</summary>
+<div style={{ display: 'flex' , flexDirection: 'row', justifyContent: 'center' }}>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div>
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Util/ Controls](#util-controls)
+- [Design Patterns](#design-patterns)
+- [Data Aggregation](#data-aggregation)
+- [Optimizations](#optimizations)
+  - [Web Workers](#web-workers)
+- [Conclusion](#conclusion)
 
 
-
-  This is the collapsible section content.
-</details>
-
-
-## Overview
+### Overview
 
 At its core, LiveTree employs multiple recursive tree traversal strategies to ```search``` , ```parse/aggregate``` and  ```render``` the tree structures the user interacts with in the Webflow designer. This rendering process caters to any depth of nested The recursive nature of the component is exemplified through the use of the TreeViewNode, which takes charge of rendering individual nodes, as well as their child nodes.
 
@@ -214,7 +222,7 @@ function TreeViewNode({ css, passDownCss, node, activeItems, setActiveItems, lev
 
 </Tabs>
 
-## Util/ Controls
+### Util/ Controls
 
 
 <details>
@@ -229,11 +237,11 @@ function TreeViewNode({ css, passDownCss, node, activeItems, setActiveItems, lev
 </details>
 
 
-## Design Patterns
+### Design Patterns
 <details>
   <summary>Control Details</summary>
-### Fanout
-### Throughput
+#### Fanout
+#### Throughput
 
 </details>
 
@@ -242,7 +250,7 @@ function TreeViewNode({ css, passDownCss, node, activeItems, setActiveItems, lev
 
 
 
-## Data Aggregation
+### Data Aggregation
 <details>
   <summary>Data Aggregation Details:</summary>
 The **`useWeb`** custom hook is designed to handle parsing of stylesheets and efficient caching of the results using IndexedDB. This hook leverages web workers to offload the parsing and caching tasks to separate threads, enabling the main thread to remain responsive and unblocked.
@@ -268,7 +276,7 @@ The **`useWeb`** hook provides the following functions:
 
 
 
-## Optimizations
+### Optimizations
 
 <details>
   <summary>Opitmization Details</summary>
@@ -282,7 +290,7 @@ The **`useWeb`** hook provides the following functions:
 
 
 
-### **Web Workers**
+#### **Web Workers**
 
 <details>
 
