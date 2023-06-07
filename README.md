@@ -1,23 +1,25 @@
-# Nextra Docs Template 
+This document provides instructions on how to set up and run the project. Please follow the steps below in order to ensure a smooth execution.
 
-This is a template for creating documentation with [Nextra](https://nextra.site).
+## **Step 1: Set up the Environment Variables**
 
-[**Live Demo →**](https://nextra-docs-template.vercel.app)
+1. Create a new file named **`.env`** in the project's root directory.
+2. Open the **`.env.example`** file and copy its contents.
+3. Paste the copied contents into the newly created **`.env`** file.
+4. Edit the **`.env`** file and set the following values:
+    - NODE_ENV="development"
+    - TS_TRANSPILE_ONLY="true"
 
-[![](.github/screenshot.png)](https://nextra-docs-template.vercel.app)
+## **Step 2: Install Dependencies**
 
-## Quick Start
+1. Navigate to the FlowKit directory using the command line interface.
+2. Run the command **`npm install`** to install the project's dependencies.
 
-Click the button to clone this repository and deploy it on Vercel:
+## **Step 3: Build the Project**
 
-[![](https://vercel.com/button)](https://vercel.com/new/clone?s=https%3A%2F%2Fgithub.com%2Fshuding%2Fnextra-docs-template&showOptionalTeamCreation=false)
-
-## Local Development
-
-First, run `pnpm i` to install the dependencies.
-
-Then, run `pnpm dev` to start the development server and visit localhost:3000.
-
-## License
-
-This project is licensed under the MIT License.
+1. To build the worker, run the command **`npm run build:worker`**.
+2. To build the project for production, run the command **`npm run build:prod`**.
+3. Load your extension on Chrome following:
+    1. Access `chrome://extensions/`
+    2. Check `Developer mode`
+    3. Click on `Load unpacked extension`
+    4. Select the `build` folder.
