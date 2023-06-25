@@ -1,0 +1,77 @@
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: #4f4f4f;
+}
+
+
+.player {
+ 
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: center;
+  width: 80%;
+  padding: auto;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.chapterGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.chapterColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  max-width: 30%;
+  padding: 10px;
+  border :1px solid #4f4f4f46;
+  border-radius: 8px;
+  
+}
+
+.chapterColumn:hover {
+  background-color: #393939;
+}
+
+.chapterButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 10 0px;
+  border-radius: 8px;
+
+}
+
+
+.chapterDescription {
+  font-size: 14px;
+  color: #878787;
+  text-align: left;
+}
+
+.childContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: fill-available;
+}
