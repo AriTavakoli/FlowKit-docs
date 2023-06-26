@@ -13,6 +13,12 @@ const YouTubeChapters = ({ videoId, chapters, children }) => {
             width: 640,
             height: 390,
         });
+        
+        player.current.on('stateChange', event => {
+            if (event.data === 1) { // The player is ready when the video starts playing
+                player.current.isReady = true;
+            }
+        });
 
         return () => {
             if (checkIntervalRef.current) {
@@ -21,9 +27,15 @@ const YouTubeChapters = ({ videoId, chapters, children }) => {
         };
     }, [videoId]);
 
-    const playChapter = (startSeconds, endSeconds) => {
-        player.current.seekTo(startSeconds);
-        player.current.playVideo();
+    const playChapter = async (startSeconds, endSeconds) => {
+        if (!player.current.isReady) return;
+        if (checkIntervalRef.current) {
+            clearInterval(checkIntervalRef.current);
+        }
+
+        await player.current.seekTo(startSeconds);
+        await player.current.playVideo();
+        
         checkIntervalRef.current = setInterval(() => {
             player.current.getCurrentTime().then((currentTime) => {
                 if (currentTime >= endSeconds) {
@@ -33,7 +45,6 @@ const YouTubeChapters = ({ videoId, chapters, children }) => {
             });
         }, 1000);
     };
-
     return (
         <div className={styles.container} >
             <div className={styles.childContainer}>
