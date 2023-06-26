@@ -53,7 +53,7 @@ For the sake of Brevity I will only be covering the main highlighted features of
     { name: 'Custom Interpreter', start: 153 , end: 204 , description: 'A Demo of the BEM classname suggestion Interpreter' },
   ]}
 >
-<Tabs items={['Overview','Usage' ]}>
+<Tabs items={['Overview']}>
   <Tab>
     <details open>
       <summary>Overview</summary>
@@ -107,16 +107,19 @@ Deeper Dive - TOC
 <YoutubePlayer
   videoId="F-teerojMaQ"
   chapters={[
-    { name: 'Chapter 1', start: 0, end: 10, description: 'This is Chapter 1 where we show the demo of the feature amonst other things' },
-    { name: 'Chapter 2', start: 10, end: 20, description: 'This is Chapter 2 This is Chapter 1 where we show the demo of the feature amonst other things' },
-    { name: 'Chapter 3', start: 20, end: 30, description: 'This is Chapter 3 This is Chapter 1 where we show the demo of the feature amonst other things' },
+    { name: 'Intro/Demo', start: 0, end: 10, description: 'A demo of critical features to give some broader perspective of what is possible.' },
+    { name: 'Worskpace Blocks', start: 145 , end: 180, description: 'A demo of how templates can be used as resusable blocks for quick and efficient development' },
+    { name: 'Implementation Details', start: 182, end: 287, description: 'A discussion of the strategy behind implementing a custom tempalte editor along with multi media encoding/ serialization' },
   ]}
 >
-<Tabs items={['Overview','Usage' ]}>
+<Tabs items={['Overview' ]}>
   <Tab>
     <details open>
       <summary>Overview</summary>
-      sdsdsd
+
+The Template Builder is a feature that simplifies the creation of customizable templates by embedding various data sources, including webflow elements. Users can insert query variables from different data types and specify output formats. 
+
+Templates can be saved as reusable blocks, organized in the workspace, and integrated into webflow. Implementation involves a custom Blob Builder class for efficient data manipulation, while a serializer ensures compatibility with different data sources. The Template Builder streamlines the template creation process, enhancing productivity and flexibility.
     </details>
   </Tab>
     <Tab>
@@ -171,16 +174,18 @@ Deeper Dive - TOC
 <YoutubePlayer
   videoId="YKfceotShXQ"
   chapters={[
-    { name: 'Chapter 1', start: 0, end: 10, description: 'This is Chapter 1 where we show the demo of the feature amonst other things' },
-    { name: 'Chapter 2', start: 10, end: 20, description: 'This is Chapter 2 This is Chapter 1 where we show the demo of the feature amonst other things' },
-    { name: 'Chapter 3', start: 20, end: 30, description: 'This is Chapter 3 This is Chapter 1 where we show the demo of the feature amonst other things' },
+    { name: 'Intro', start: 0, end: 60, description: 'This is Chapter 1 where we show the demo of the feature amonst other things' },
+    { name: 'Investigation', start: 61, end: 99, description: 'This is Chapter 2 This is Chapter 1 where we show the demo of the feature amonst other things' },
+    { name: 'Summary', start: 100, end: 134, description: 'This is Chapter 3 This is Chapter 1 where we show the demo of the feature amonst other things' },
   ]}
 >
-<Tabs items={['Overview','Usage' ]}>
+<Tabs items={['Overview' ]}>
   <Tab>
     <details open>
       <summary>Overview</summary>
-      sdsdsd
+      The Style Guide Reference is a feature designed to streamline the process of referencing and utilizing design systems within Webflow. It provides a pop-out window that replicates the Webflow page, allowing designers to easily select elements and copy their associated class names.
+
+The feature offers different methods of investigating and referencing the Webflow page. These include a recursive tree structure that emulates the DOM, direct element selection on the page, and the ability to explore different devices through media queries.
     </details>
   </Tab>
     <Tab>
