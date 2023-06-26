@@ -6,8 +6,7 @@ title: "FlowKit"
 import YoutubePlayer from '../components/Youtube/YoutubePlayer';
 import styles from './styles/Index.module.css';
 import { Tab, Tabs } from 'nextra-theme-docs'
-
-
+import ImageGrid from '../components/Slider/ImageGrid';
 
 
 <br/>
@@ -38,8 +37,55 @@ For the sake of Brevity I will only be covering the main highlighted features of
 
 [See the Project Live!](https://chrome.google.com/webstore/detail/flowkit/kkoecihmpjfkfpfkffgiohcniepmdhif?hl=en&authuser=0)
 
+<br/>
 
 
+
+
+<Tabs items={['Light' , 'Dark']}>
+  <Tab>
+    <details open>
+      <summary></summary>
+<div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridGap: '8px' }}>
+  <div style={{ width: '100%', height: '0', paddingBottom: '65%', backgroundSize: 'cover', backgroundImage: 'url(path-to-your-image1.jpg)' }}>
+![Image](.././assets/Ui/Light/Styleguide.png)
+  </div>
+  <div style={{ width: '100%', height: '0', paddingBottom: '65%', backgroundSize: 'cover', backgroundImage: 'url(path-to-your-image2.jpg)' }}>
+![Image](.././assets/Ui/Light/TemplateBuilder.png)
+  </div>
+  <div style={{ width: '100%', height: '0', paddingBottom: '100%', backgroundSize: 'cover', backgroundImage: 'url(path-to-your-image3.jpg)' }}>
+![Image](.././assets/Ui/Light/Webflow.png)
+  </div>
+  <div style={{ width: '100%', height: '0', paddingBottom: '100%', backgroundSize: 'cover', backgroundImage: 'url(path-to-your-image4.jpg)' }}>
+   ![Image](.././assets/Ui/Light/Asset.png)
+  </div>
+</div>
+
+
+  
+    </details>
+  </Tab>
+    <Tab>
+    <details open>
+      <summary></summary>
+     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gridGap: '8px' }}>
+        <div style={{ width: '100%', height: '0', paddingBottom: '65%', backgroundSize: 'cover', backgroundImage: 'url(path-to-your-image1.jpg)' }}>
+![Image](.././assets/Ui/Dark/Styleguide.png)
+  </div>
+  <div style={{ width: '100%', height: '0', paddingBottom: '65%', backgroundSize: 'cover', backgroundImage: 'url(path-to-your-image2.jpg)' }}>
+![Image](.././assets/Ui/Dark/Template.png)
+  </div>
+  <div style={{ width: '100%', height: '0', paddingBottom: '100%', backgroundSize: 'cover', backgroundImage: 'url(path-to-your-image3.jpg)' }}>
+![Image](.././assets/Ui/Dark/Webflow.png)
+  </div>
+  <div style={{ width: '100%', height: '0', paddingBottom: '100%', backgroundSize: 'cover', backgroundImage: 'url(path-to-your-image4.jpg)' }}>
+   ![Image](.././assets/Ui/Dark/Asset.png)
+  </div>
+</div>
+
+    </details>
+  </Tab>
+</Tabs>
 
 
 <div style={{ display: 'flex' , flexDirection: 'Column', justifyContent: 'center' , alignItems: 'center', }}>
@@ -132,7 +178,6 @@ Templates can be saved as reusable blocks, organized in the workspace, and integ
 <br/>
 <br/>
 <br/>
-
 
 
 
